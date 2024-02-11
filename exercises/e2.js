@@ -41,7 +41,7 @@ export const handlePromise = (promise) => {
     (resolve) => {
       return resolve; // If the promise resolves, return the resolved value
     },
-    (reject) => {
+    () => {
       return 'Uh Oh'; // If the promise rejects, return "Uh Oh"
     }
   );

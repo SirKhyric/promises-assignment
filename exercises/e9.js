@@ -39,11 +39,8 @@ export function alwaysThrows() {
 
 export function onReject(error) {
   // Your code goes here...
-  if (error instanceof Error) {
-    console.log(error.message);
-  } else {
-    console.log(error);
-  }
+  const valueToLog = error instanceof Error ? error.message : error;
+  console.log(valueToLog);
 }
 
 /**

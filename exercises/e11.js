@@ -57,7 +57,6 @@ export const result = getData
   .then(response => response.json())
   .then(data => {
     const logins = getLoginList(data);
-    console.log('The PROMISE was RESOLVED');
     console.log(logins);
     return logins;
 });

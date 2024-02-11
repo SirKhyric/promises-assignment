@@ -1,20 +1,11 @@
 export const getFirstResolvedPromise = (promises) => {
-  const ignoreRejections = promises
-    .map(p => p
-    .catch(() => new Promise(() => {}))
-  );
-
-  return Promise.race(ignoreRejections);
+  return Promise.any(promises);
 };
 
 export const getFirstPromiseOrFail = (promises) => {
   //*  write code to pass test ⬇ ️
 
-  return new Promise((resolve, reject) => {
-    promises.forEach(promise => {
-      promise.then(resolve).catch(reject);
-    })
-  });
+  return Promise.race(promises);
 };
 
 export const getQuantityOfRejectedPromises = (promises) => {
@@ -63,13 +54,15 @@ export const fetchAllCharactersByIds = async (ids) => {
   const promises = ids.map(id =>
     fetchCharacterById(id));
     
-  const results = await Promise.allSettled(promises);
-  const isAnyRejected = results
-    .some(result => result.status === 'rejected');
   
-  if(isAnyRejected) {
-    return [];
-  } else {
-    return results.map(result => result.value);
-  }
+  return Promise.allSettled(promises)
+    .then(results => {
+      const fulfilledResults = results.filter(result => result.status === 'fulfilled');
+      const characters = fulfilledResults.map(result => result.value);
+      return characters.length === ids.length ? characters : [];
+    })
+    .catch(error => {
+      console.error(error);
+      return [];
+    });
 };
